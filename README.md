@@ -23,11 +23,11 @@ To maintain a lightweight repository, the raw data files are not included. To ru
 
 ### 2. Wave Modeling (MOP)
 * **Source:** CDIP (Coastal Data Information Program)
-* **Data:** Monitoring and Prediction (MOP) shallow-water hindcasts/nowcasts for the Bolinas nearshore.
+* **Required File:** Monitoring and Prediction (MOP) shallow-water hindcasts/nowcasts for the Bolinas nearshore.
 
 ### 3. Buoy Observations
 * **Source:** CDIP Station 029 (Point Reyes)
-* **Data:** Deep-water spectral wave data (Direction, Period, and Significant Wave Height).
+* **Data:** Deep-water spectral wave data (Direction, Period, and Significant Wave Height). Pulled directly from the web. 
 
 ---
 
