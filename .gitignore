@@ -205,3 +205,27 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# ==============================================================================
+# Custom Ocean Data & Outputs
+# ==============================================================================
+# Ignore the data directory entirely
+data/
+
+# Specific Scientific Data Formats
+*.nc
+*.nc4
+*.cdl
+*.csv
+*.mat
+*.grib
+*.grb
+*.tiff
+*.tif
+*.h5
+*.hdf5
+
+# Ignore local export figures (keep your repo clean)
+gallery/*.png
+gallery/*.pdf
+plots/
