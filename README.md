@@ -42,10 +42,11 @@ A comparative exploratory data analysis of two major underwater image annotation
 6. Deployment synthesis — database selection by collection type
 
 **Key Findings:**
-- SQUIDLE+ is ~23× larger by image count; FathomNet is ~4× denser in annotations per image.
-- FathomNet is ROV-only (sole registered imaging type); SQUIDLE+ spans all 6 major collection types.
-- SQUIDLE+ annotation taxonomy: Physical substrate annotations outnumber biological at the root level and beyond.
-- The two databases serve complementary niches: FathomNet for ROV/deep-water species detection; SQUIDLE+ for AUV, diver, towed, and benthic survey work.
+- **Scale**: SQUIDLE+ is ~23× larger (10.5M vs 448K images), but FathomNet is ~4× denser (2.41 vs 0.61 annotations/image); SQUIDLE+ spans 25,441 deployments across 32 platforms.
+- **Platform lock-in**: FathomNet is ROV-only — 9 institutions, with the top 3 (NOAA NMFS SEFSC, MBARI, NOAA Ocean Exploration) accounting for 91% of all images. SQUIDLE+ explicitly tracks collection type for every deployment: AUV (4 platforms), BRUVs (8), Diver (5), Drop Camera (3), ROV (6), Towed (5).
+- **Depth split**: FathomNet is a deep-water database (median ~866 m, range 3–5,831 m; NE Pacific bias). SQUIDLE+ is predominantly shallow — 94% of deployments are under 100 m, with global geographic reach (43/72 grid cells populated).
+- **Label format and class imbalance**: FathomNet uses bounding boxes across 2,870 taxa, but the distribution is severely long-tailed — 117 taxa account for 80% of all boxes, and the single top label (*Lutjanus campechanus*) holds 14% of all annotations. SQUIDLE+ uses CATAMI point labels dominated by physical substrate: L0 "Physical" leads with 1.23M annotations, L1 "Substrate" with 1.2M, and L2 "Unconsolidated (soft)" with 1.06M. Critically, CATAMI is not a single hierarchy — it defines parallel classification axes (biota identity, physical substrate, geoform, ecological status), so the same real-world object can be labelled under multiple axes simultaneously. Keyword filtering alone is unreliable; axis selection is a prerequisite before building any training set from SQUIDLE+.
+- **Complementary niches**: FathomNet is the right source for ROV/deep-water species detection (YOLO-ready boxes). SQUIDLE+ covers AUV, diver, towed, BRUV, and benthic habitat work (CATAMI substrate classification). Mixing them without domain alignment is likely to hurt model performance.
 
 **Dependencies:** `fathomnet` (PyPI), `pandas`, `numpy`, `matplotlib`, `Pillow`, `requests`
 
