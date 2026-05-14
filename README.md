@@ -54,12 +54,56 @@ Both databases are accessed live — FathomNet via the `fathomnet` Python librar
 
 ---
 
+### 3. Kelp Ecosystem EDA — CMEMS Oceanographic Pipeline
+**File:** `Copernicus_Marine_Kelp_Ecosystem_EDA.ipynb`
+
+Exploratory data analysis of four Copernicus Marine (CMEMS) satellite and reanalysis products for the **California kelp coast (Monterey → Mendocino, 36.5–40.0°N)**, spanning 2002 to present. Each product is constructed as a **MY (reprocessed) + NRT/NFC (operational) blend** for full historical and near-real-time coverage. Section 0 validates every product seam before analysis proceeds.
+
+**Data Sources (all via CMEMS):**
+
+| Product | Variables | Date range | Spatial res. |
+|---|---|---|---|
+| SST — OSTIA L4 | `analysed_sst` (skin °C) | 2002–present | 0.05° (~5 km) |
+| Chl-a — OC-CCI L4 multi-sensor | `CHL` (mg m⁻³) | 2002–present | 4 km |
+| Subsurface T/S — GLORYS12 | `thetao`, `so` (0–30 m) | 2002–present | 0.083° |
+| SSH & currents — DUACS | `adt`, `ugos`, `vgos` | 2002–present | 0.25° |
+
+**Sections:**
+1. **Seam validation** — MY vs NRT/NFC bias check; ADT bias-corrected (+0.013 m)
+2. **SST** — monthly time series and year × stage heatmap
+3. **Chlorophyll-a** — anomalously low stage flags, nearshore vs offshore gradient
+4. **Subsurface T/S** — thetao/salinity heatmaps, nearshore freshening, SST vs thetao comparison
+5. **SSH & geostrophic currents** — ADT heatmap, peak-stage composite vector map
+6. **Correlation matrix & phase transitions** — cross-variable correlations, low-chl-a year identification
+7. **Anomaly analysis** — monthly anomalies from a 2002–2012 pre-collapse baseline
+8. **Spatial decomposition** — latitude-binned anomalies (Monterey, Bodega/SF, Mendocino) and record-SST map
+9. **Lead-lag cross-correlations** — Pearson CCF at ±6 months
+10. **Thermocline depth** — depth of max |dT/dz| in GLORYS 0–30 m column
+11. **Stress-year composites** — anomaly comparison, stress years (2014, 2022–2025) vs neutral
+12. **Trend analysis** — per-stage OLS linear trends for all five variables
+
+**Key Findings:**
+- **2014 marine heatwave** dominates the record: SST anomaly +4.12°C (Sep 2014), subsurface thetao +3.32°C simultaneously — the anomaly penetrated the full 0–30 m layer, not skin-only.
+- **ADT → chl-a** is the strongest ecological coupling (r = −0.55): elevated SSH suppresses upwelling and surface nutrients.
+- **Stress-year signature**: five stress years (2014, 2022–2025) each show their largest departure from neutral during **Senescence (Sep–Nov)** across all five variables — SST +1.25°C, thetao +1.42°C, chl-a −0.20 log1p, ADT +0.07 m, salinity −0.14 PSU.
+- **2025** is the only year on record with three consecutive productive stages (Recruit, Growth, Peak) simultaneously below within-stage thresholds.
+- **Significant trends**: ADT rising in all stages (p < 0.005); subsurface thetao warming in Winter (p = 0.022); Chl-a declining during Growth (p = 0.012, −0.009 log1p/yr); SST surface trends not significant in any stage.
+- **Nearshore chl-a 2.19× higher** than offshore; 21 estuarine/inland-water pixels excluded via time-mean mask.
+- **Thermocline depth**: mean 12.7 m ± 9.4 m; shallowest in late summer (upwelling-driven), 32 of 296 months fully mixed.
+
+**Dependencies:** `copernicusmarine`, `xarray`, `numpy`, `pandas`, `matplotlib`, `scipy`
+
+Data is fetched directly from CMEMS via the `copernicusmarine` Python client. A free CMEMS account is required.
+
+---
+
 ## Repository Structure
 
 ```
 ocean-data-exploration/
 ├── bolinas-wave-energy-transformation.ipynb
 ├── fathomnet_squidle_comparative_eda.ipynb
+├── Copernicus_Marine_Kelp_Ecosystem_EDA.ipynb
 ├── /data                    # local data files (gitignored)
 └── .gitignore               # ignores .nc, .csv, .mat files
 ```
