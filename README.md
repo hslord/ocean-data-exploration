@@ -97,6 +97,33 @@ Data is fetched directly from CMEMS via the `copernicusmarine` Python client. A 
 
 ---
 
+### 4. Kelp Canopy EDA — KelpWatch Landsat Time Series
+**File:** `kelp_canopy_eda.ipynb`
+
+Exploratory data analysis of the SBC LTER / KelpWatch Landsat-derived kelp canopy dataset for the **California kelp coast (Monterey → Mendocino, 36.5–40.0°N)**, 2002–present. Quarterly 30 m canopy area and giant kelp biomass across 45,564 coastal pixels. Analysis window matches the Copernicus Marine notebook to enable future joint analysis.
+
+**Sections:**
+1. **Data quality** — sensor timeline, SLC failure, coverage gaps
+2. **Canopy area time series** — domain mean and total extent, year × quarter heatmap
+3. **Spatial decomposition** — latitude-binned time series and heatmaps (Monterey / Bodega-SF / Mendocino) as species proxy
+4. **Anomaly analysis** — quarterly anomalies from 2002–2012 pre-collapse baseline
+5. **Pre vs post-collapse composites** — per-quarter mean area, pre (2002–2012) vs post (2013–present)
+6. **Trend analysis** — full-record OLS, Mann-Whitney pre/post break, post-collapse OLS (Monterey), biomass vs canopy area divergence
+7. **Satellite basemap overlay** — KelpWatch pixels on USGS imagery, best vs worst Q3 comparison
+8. **Summary of findings**
+
+**Key Findings:**
+- **Collapse onset at 2013** is visible as a sharp transition across all time series and heatmaps; best Q3 on record is 2012; worst is 2023 
+- **Q3 Peak:** domain mean fell from 87.2 m²/pixel (pre-collapse) to 30.1 m²/pixel (post-collapse) — a 65% loss
+- **Two structurally different collapses by species:** giant kelp (*Macrocystis*, Monterey) suffered a step-change and continues to erode post-collapse — Q3 losing ~6 m²/pixel per quarter; bull kelp (*Nereocystis*, Mendocino) collapsed abruptly with the cliff extending into Q2 (spring recruitment), and shows no further detectable trend since 2013
+- **Decline mode — canopy thinning:** Monterey biomass falls faster than canopy area post-collapse; the geographic footprint of patches persists but canopy density is declining
+
+**Data Requirements:** Single ~2.4 GB NetCDF file (SBC LTER KelpWatch, `knb-lter-sbc.74.29`) — downloaded automatically via the EDI PASTA public API. No login required. Cached to `/data/kelpwatch_cache/` (gitignored).
+
+**Dependencies:** `xarray`, `numpy`, `pandas`, `matplotlib`, `scipy`, `requests`, `tqdm`, `netCDF4`, `Pillow`
+
+---
+
 ## Repository Structure
 
 ```
@@ -104,6 +131,7 @@ ocean-data-exploration/
 ├── bolinas-wave-energy-transformation.ipynb
 ├── fathomnet_squidle_comparative_eda.ipynb
 ├── Copernicus_Marine_Kelp_Ecosystem_EDA.ipynb
+├── kelp_canopy_eda.ipynb
 ├── /data                    # local data files (gitignored)
 └── .gitignore               # ignores .nc, .csv, .mat files
 ```
