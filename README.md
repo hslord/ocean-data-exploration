@@ -191,7 +191,7 @@ ocean-data-exploration/
 ├── Copernicus_Marine_Kelp_Ecosystem_EDA.ipynb
 ├── kelp_canopy_eda.ipynb
 ├── kelp_species_observation_eda.ipynb
-├── kelp_urchin_oceanography.ipynb
+├── monterey_kelp_canopy_analysis.ipynb
 ├── /data                    # local data files (gitignored)
 └── .gitignore               # ignores .nc, .csv, .mat files
 ```
