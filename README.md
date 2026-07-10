@@ -124,6 +124,64 @@ Exploratory data analysis of the SBC LTER / KelpWatch Landsat-derived kelp canop
 
 ---
 
+### 5. Kelp Ecosystem — Species Observation EDA
+**File:** `kelp_species_observation_eda.ipynb`
+
+Multi-source presence/abundance analysis of four priority species on the **California kelp coast (Monterey → Mendocino, 36.5–40.0°N)**, 2002–present. Four data sources are layered from most quantitative (BCO-DMO ground truth) to broadest institutional coverage (OBIS + GBIF targeted datasets) to highest citizen science volume (iNaturalist). Produces a unified `species_obs_combined.parquet` artifact for downstream ML labeling.
+
+| Source | API / Library | Data type |
+|---|---|---|
+| BCO-DMO ERDDAP (5 datasets) | `erddapy` → `erddap.bco-dmo.org/erddap` | Abundance / density (ground truth) |
+| OBIS | `pyobis` | Presence / absence — institutional records |
+| GBIF targeted datasets | `requests` → `api.gbif.org` | Monitoring + occurrence (MLPA + Bull Kelp DB) |
+| iNaturalist | `pyinaturalist` | Presence / absence — citizen science (research grade) |
+
+**Priority species:** *Strongylocentrotus purpuratus* (purple urchin), *Pycnopodia helianthoides* (sunflower sea star), *Nereocystis luetkeana* (bull kelp), *Macrocystis pyrifera* (giant kelp)
+
+**Sections:**
+1. **ETL** — BCO-DMO (5 datasets), OBIS, iNaturalist, GBIF (MLPA + Bull Kelp DB by `datasetKey`); unified `species_obs_combined.parquet` output
+2. **BCO-DMO ground truth** — urchin density, community surveys (1999–2016), recruitment
+3. **OBIS** — annual observation counts and spatial distribution by species
+4. **iNaturalist** — annual trends, sunflower sea star effort-normalised trend, observer effort and spatial bias
+5. **GBIF targeted datasets** — MLPA monitoring archive + Bull Kelp Database; recency and coverage analysis
+6. **Cross-source synthesis** — combined annual timeline (all 7 sources), coverage summary table, records by data layer
+7. **Summary of findings**
+
+**BCO-DMO datasets:** `927682_v1` (MLPA/PISCO invertebrate counts), `928527_v1` (substrate), `661081` (Monterey Bay community surveys 1999–2016), `661151` (percent cover), `929812_v1` (urchin recruitment)
+
+**Data Requirements:** All data fetched live — no downloads required. Cached to `/data/species_obs_cache/` (gitignored).
+
+**Dependencies:** `erddapy`, `pyobis`, `pyinaturalist`, `requests`, `numpy`, `pandas`, `matplotlib`
+
+---
+
+### 6. Monterey Kelp Canopy — Sensor Design Analysis
+**File:** `monterey_kelp_canopy_analysis.ipynb`
+
+Exploratory analysis of oceanographic variables inside vs. outside giant kelp canopy at **Hopkins Marine Station, Monterey (~36.6°N)**, using co-located mooring data from BCO-DMO. Goal: identify which variables are most diagnostic of kelp presence for a fixed mooring deployment.
+
+**Dataset:** BCO-DMO 822549 — 9-depth paired mooring, `KELP` (inside canopy) vs. `OUTSIDE` (~115m offshore), Jun–Oct 2018. Variables: pH, DO, temperature, salinity, PAR. Analysis follows Hirsh et al. (2020), *JGR Oceans*.
+
+**Sections:**
+1. **Data profile** — sensor depth map, variable coverage, MAB geometry
+2. **Temperature** — matched-depth profiles and stratification (surface − ~9m)
+3. **Diurnal pH and DO** — day/night split at sub-canopy depths; tests for kelp metabolic signal
+4. **pH, DO, and salinity time series** — inside-vs-outside differences and spike asymmetry
+5. **Sensor recommendations** — variables ranked by kelp-presence signal strength
+
+**Key Findings:**
+- **PAR is the only unambiguous canopy indicator.** The KELP bottom sensor (9.9m) records a daytime mean of 4.60 μmol m⁻² s⁻¹ vs. 11.23 μmol m⁻² s⁻¹ at OUTSIDE (17.7m) — 59% lower *despite* being 7.8m shallower. This inversion of expected depth-attenuation is a direct canopy signature.
+- **pH and DO are not diagnostic of kelp presence** at the depths sampled. Both are lower inside the kelp at sub-canopy depths (pH −0.04 to −0.19; DO −22 to −32 μmol/kg), driven by canopy shading and physical advection rather than kelp metabolism. The surface layer where photosynthetic buffering occurs (~1–5m) is uninstrumented in the moored record.
+- **Temperature shows no kelp metabolic signal** (<0.2°C at all matched depths; stratification comparable between sites). Salinity differences (<0.06 PSU) are confounded by sensor geometry and cannot be attributed to kelp.
+- **Internal tidal bores** drive semidiurnal variability at both sites; OUTSIDE is more variable short-term, but seasonal means are lower inside for DO and pH.
+- **Recommended sensor priority for a kelp-bed mooring:** PAR (~5–10m) → pH (depth-dependent) → DO → CTD.
+
+**Data Requirements:** `mooring_inside_outside.csv` from BCO-DMO dataset 822549 — downloaded manually from [bco-dmo.org/dataset/822549](https://www.bco-dmo.org/dataset/822549); place in `data/bco_dmo/`.
+
+**Dependencies:** `pandas`, `numpy`, `matplotlib`
+
+---
+
 ## Repository Structure
 
 ```
@@ -132,6 +190,8 @@ ocean-data-exploration/
 ├── fathomnet_squidle_comparative_eda.ipynb
 ├── Copernicus_Marine_Kelp_Ecosystem_EDA.ipynb
 ├── kelp_canopy_eda.ipynb
+├── kelp_species_observation_eda.ipynb
+├── kelp_urchin_oceanography.ipynb
 ├── /data                    # local data files (gitignored)
 └── .gitignore               # ignores .nc, .csv, .mat files
 ```
